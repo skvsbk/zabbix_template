@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-07-29T11:51:05Z</date>
+    <groups>
+        <group>
+            <name>Templates/Network devices</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template Eltex MES discovery MAC-table SNMPv2</template>
+            <name>Template Eltex MES discovery MAC-table SNMPv2</name>
+		<description>Created by Konstantin Svitochev&#13;
+&#13;
+Collects MACs by SNMP</description>
+            <groups>
+                <group>
+                    <name>Templates/Network devices</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>MAC-table discovery</name>
+                </application>
+            </applications>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Network interfaces for MAC</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>discovery[{#SNMPVALUE},IF-MIB::ifName]</snmp_oid>
+                    <key>interfaceName</key>
+                    <delay>1d</delay>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#SNMPVALUE}</macro>
+                                <value>^(gi|te|fa)([1-5])\/0\/([1-9]{1}|[1-4]{1}[0-9]{1})$</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <lifetime>7d</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Port {#SNMPVALUE} MAC-table</name>
+                            <type>EXTERNAL</type>
+                            <key>get_mac_from_db.py[{HOST.IP},{#SNMPINDEX}]</key>
+                            <delay>8h</delay>
+                            <history>10d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>MAC-table discovery</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+</zabbix_export>
