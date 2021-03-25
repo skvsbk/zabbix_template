@@ -1,0 +1,1 @@
+Some templates for zabbix
