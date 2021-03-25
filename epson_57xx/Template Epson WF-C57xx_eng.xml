@@ -13,7 +13,7 @@
             <name>Template Epson WF-C57xx_eng</name>
             <description>Created by Konstantin Svitochev&#13;
 &#13;
-Collects data via SNMP and parsing (in the case of using non-original cartridges)</description>
+Collects data by SNMP and parsing (in the case of using non-original cartridges)</description>
             <groups>
                 <group>
                     <name>Templates/Printers</name>
