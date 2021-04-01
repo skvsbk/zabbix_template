@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2021-04-01T11:53:17Z</date>
+    <groups>
+        <group>
+            <name>Templates/Network devices</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template LTV-RNE_eng</template>
+            <name>Template LTV-RNE_eng</name>
+            <description>Created by Konstantin Svitochev</description>
+            <groups>
+                <group>
+                    <name>Templates/Network devices</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>IP cams</name>
+                </application>
+                <application>
+                    <name>Web</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Cams</name>
+                    <type>EXTERNAL</type>
+                    <key>get_cams.py[{HOST.CONN}, &quot;element&quot;]</key>
+                    <delay>5m</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <applications>
+                        <application>
+                            <name>IP cams</name>
+                        </application>
+                    </applications>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Cams discovery</name>
+                    <type>EXTERNAL</type>
+                    <key>get_cams.py[{HOST.CONN}, &quot;discovery&quot;]</key>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Channel - {#CAMNUMBER} - {#CAMNAME}</name>
+                            <type>DEPENDENT</type>
+                            <key>camChannel[{#CAMNUMBER}]</key>
+                            <delay>0</delay>
+                            <description>Канал - {#CAMNUMBER}&#13;
+Наименование - {#CAMNAME}&#13;
+IP - {#CAMIP}&#13;
+Модель - {#CAMMODEL}</description>
+                            <applications>
+                                <application>
+                                    <name>IP cams</name>
+                                </application>
+                            </applications>
+                            <valuemap>
+                                <name>LTV</name>
+                            </valuemap>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.{#CAMNUMBER}</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>get_cams.py[{HOST.CONN}, &quot;element&quot;]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}=0</expression>
+                                    <name>Camera unavailable! ({HOST.NAME}  Channel - {#CAMNUMBER})</name>
+                                    <priority>DISASTER</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <httptests>
+                <httptest>
+                    <name>Web site availability</name>
+                    <application>
+                        <name>Web</name>
+                    </application>
+                    <agent>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/80.0.3987.87 Chrome/80.0.3987.87 Safari/537.36</agent>
+                    <steps>
+                        <step>
+                            <name>Availability</name>
+                            <url>http://{HOST.CONN}</url>
+                            <follow_redirects>NO</follow_redirects>
+                            <required>loadingIndicator_bk</required>
+                        </step>
+                    </steps>
+                </httptest>
+            </httptests>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <expression>{Template LTV-RNE_eng:web.test.fail[Web site availability].last(#3)}&lt;&gt;0</expression>
+            <name>{HOST} is not available</name>
+            <priority>DISASTER</priority>
+        </trigger>
+    </triggers>
+    <value_maps>
+        <value_map>
+            <name>LTV</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>Offline</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>Online</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
+</zabbix_export>
