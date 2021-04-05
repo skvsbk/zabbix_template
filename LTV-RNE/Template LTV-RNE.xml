@@ -105,7 +105,7 @@ IP - {#CAMIP}&#13;
     <triggers>
         <trigger>
             <expression>{Template LTV-RNE_eng:web.test.fail[Web site availability].last(#3)}&lt;&gt;0</expression>
-            <name>{HOST} is not available</name>
+            <name>{HOST.NAME} is not available</name>
             <priority>DISASTER</priority>
         </trigger>
     </triggers>
