@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2021-04-14T07:24:47Z</date>
+    <groups>
+        <group>
+            <name>Templates/Network devices</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template LTV-RNE</template>
+            <name>Template LTV-RNE</name>
+            <description>Created by Konstantin Svitochev</description>
+            <groups>
+                <group>
+                    <name>Templates/Network devices</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>DVR</name>
+                </application>
+                <application>
+                    <name>IP cams</name>
+                </application>
+                <application>
+                    <name>Web</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Входящая  пропускная способность (доступная)</name>
+                    <type>DEPENDENT</type>
+                    <key>BWInRemind</key>
+                    <delay>0</delay>
+                    <units>Mb</units>
+                    <applications>
+                        <application>
+                            <name>DVR</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.BWINREM</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>Входящая пропускная способность (доступная), %</name>
+                    <type>CALCULATED</type>
+                    <key>BWInRemindPersent</key>
+                    <delay>5m</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <params>100*last(BWInRemind)/last(BWInTotal)</params>
+                    <applications>
+                        <application>
+                            <name>DVR</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Входящая пропускная способность (полная)</name>
+                    <type>DEPENDENT</type>
+                    <key>BWInTotal</key>
+                    <delay>0</delay>
+                    <units>Mb</units>
+                    <applications>
+                        <application>
+                            <name>DVR</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.BWINTOTAL</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>Исходящая пропускная способность (доступная)</name>
+                    <type>DEPENDENT</type>
+                    <key>BWOutRemind</key>
+                    <delay>0</delay>
+                    <units>Mb</units>
+                    <applications>
+                        <application>
+                            <name>DVR</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.BWOUTREM</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>Исходящая пропускная способность (доступная), %</name>
+                    <type>CALCULATED</type>
+                    <key>BWOutRemindPersent</key>
+                    <delay>5m</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <params>100*last(BWOutRemind)/last(BWOutTotal)</params>
+                    <applications>
+                        <application>
+                            <name>DVR</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Исходящая пропускная способность (полная)</name>
+                    <type>DEPENDENT</type>
+                    <key>BWOutTotal</key>
+                    <delay>0</delay>
+                    <units>Mb</units>
+                    <applications>
+                        <application>
+                            <name>DVR</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.BWOUTTOTAL</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>Cams</name>
+                    <type>EXTERNAL</type>
+                    <key>get_cams.py[{HOST.CONN}, &quot;element&quot;]</key>
+                    <delay>5m</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <applications>
+                        <application>
+                            <name>IP cams</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>DVR status</name>
+                    <type>EXTERNAL</type>
+                    <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    <delay>15m</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <applications>
+                        <application>
+                            <name>DVR</name>
+                        </application>
+                    </applications>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Cams discovery</name>
+                    <type>EXTERNAL</type>
+                    <key>get_cams.py[{HOST.CONN}, &quot;discovery&quot;]</key>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Канал - {#CAMNUMBER} - {#CAMNAME}</name>
+                            <type>DEPENDENT</type>
+                            <key>camChannel[{#CAMNUMBER}]</key>
+                            <delay>0</delay>
+                            <description>Канал - {#CAMNUMBER}&#13;
+Наименование - {#CAMNAME}&#13;
+IP - {#CAMIP}&#13;
+Модель - {#CAMMODEL}</description>
+                            <applications>
+                                <application>
+                                    <name>IP cams</name>
+                                </application>
+                            </applications>
+                            <valuemap>
+                                <name>LTV</name>
+                            </valuemap>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.{#CAMNUMBER}</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>get_cams.py[{HOST.CONN}, &quot;element&quot;]</key>
+                            </master_item>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{Template LTV-RNE:web.test.fail[Web site availability].last()}=0 and {Template LTV-RNE:camChannel[{#CAMNUMBER}].last()}=0</expression>
+                            <name>Камера ofline! ({HOST.NAME} Канал - {#CAMNUMBER})</name>
+                            <priority>DISASTER</priority>
+                            <description>Срабатывает когда регистратор доступен по web, но камера ofline. Нужно для исключения массовой сработки триггера в случае отключения регистратора (либо потери связи заббикса с регистратором)</description>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <httptests>
+                <httptest>
+                    <name>Web site availability</name>
+                    <application>
+                        <name>Web</name>
+                    </application>
+                    <agent>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/80.0.3987.87 Chrome/80.0.3987.87 Safari/537.36</agent>
+                    <steps>
+                        <step>
+                            <name>Availability</name>
+                            <url>http://{HOST.CONN}</url>
+                            <follow_redirects>NO</follow_redirects>
+                            <required>loadingIndicator_bk</required>
+                        </step>
+                    </steps>
+                </httptest>
+            </httptests>
+        </template>
+        <template>
+            <template>Template LTV-RNE_eng</template>
+            <name>Template LTV-RNE_eng</name>
+            <description>Created by Konstantin Svitochev</description>
+            <groups>
+                <group>
+                    <name>Templates/Network devices</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>DVR</name>
+                </application>
+                <application>
+                    <name>IP cams</name>
+                </application>
+                <application>
+                    <name>Web</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Real-time Remain recieve Bandwidth</name>
+                    <type>DEPENDENT</type>
+                    <key>BWInRemind</key>
+                    <delay>0</delay>
+                    <units>Mb</units>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.BWINREM</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>Real-time Remain recieve Bandwidth, %</name>
+                    <type>CALCULATED</type>
+                    <key>BWInRemindPersent</key>
+                    <delay>5m</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <params>100*last(BWInRemind)/last(BWInTotal)</params>
+                    <applications>
+                        <application>
+                            <name>DVR</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Total recieve Bandwidth</name>
+                    <type>DEPENDENT</type>
+                    <key>BWInTotal</key>
+                    <delay>0</delay>
+                    <units>Mb</units>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.BWINTOTAL</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>Total Send Bandwidth</name>
+                    <type>DEPENDENT</type>
+                    <key>BWOouTotal</key>
+                    <delay>0</delay>
+                    <units>Mb</units>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.BWOUTTOTAL</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>Real-time Remain Send Bandwidth</name>
+                    <type>DEPENDENT</type>
+                    <key>BWOutRemind</key>
+                    <delay>0</delay>
+                    <units>Mb</units>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.BWOUTREM</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>Real-time Remain Send Bandwidth, %</name>
+                    <type>CALCULATED</type>
+                    <key>BWOutRemindPersent</key>
+                    <delay>5m</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <params>100*last(BWOutRemind)/last(BWOutTotal)</params>
+                    <applications>
+                        <application>
+                            <name>DVR</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Cams</name>
+                    <type>EXTERNAL</type>
+                    <key>get_cams.py[{HOST.CONN}, &quot;element&quot;]</key>
+                    <delay>5m</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <applications>
+                        <application>
+                            <name>IP cams</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>CamsDVR status</name>
+                    <type>EXTERNAL</type>
+                    <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    <delay>60m</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Cams discovery</name>
+                    <type>EXTERNAL</type>
+                    <key>get_cams.py[{HOST.CONN}, &quot;discovery&quot;]</key>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Channel - {#CAMNUMBER} - {#CAMNAME}</name>
+                            <type>DEPENDENT</type>
+                            <key>camChannel[{#CAMNUMBER}]</key>
+                            <delay>0</delay>
+                            <description>Канал - {#CAMNUMBER}&#13;
+Наименование - {#CAMNAME}&#13;
+IP - {#CAMIP}&#13;
+Модель - {#CAMMODEL}</description>
+                            <applications>
+                                <application>
+                                    <name>IP cams</name>
+                                </application>
+                            </applications>
+                            <valuemap>
+                                <name>LTV</name>
+                            </valuemap>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.{#CAMNUMBER}</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>get_cams.py[{HOST.CONN}, &quot;element&quot;]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}=0</expression>
+                                    <name>Camera unavailable! ({HOST.NAME}  Channel - {#CAMNUMBER})</name>
+                                    <priority>DISASTER</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <httptests>
+                <httptest>
+                    <name>Web site availability</name>
+                    <application>
+                        <name>Web</name>
+                    </application>
+                    <agent>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/80.0.3987.87 Chrome/80.0.3987.87 Safari/537.36</agent>
+                    <steps>
+                        <step>
+                            <name>Availability</name>
+                            <url>http://{HOST.CONN}</url>
+                            <follow_redirects>NO</follow_redirects>
+                            <required>loadingIndicator_bk</required>
+                        </step>
+                    </steps>
+                </httptest>
+            </httptests>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <expression>{Template LTV-RNE_eng:web.test.fail[Web site availability].max(300)}&lt;&gt;0</expression>
+            <name>{HOST.NAME} is not available</name>
+            <priority>DISASTER</priority>
+        </trigger>
+        <trigger>
+            <expression>{Template LTV-RNE:web.test.fail[Web site availability].max(300)}&lt;&gt;0</expression>
+            <name>{HOST.NAME} не доступен</name>
+            <priority>DISASTER</priority>
+        </trigger>
+    </triggers>
+    <value_maps>
+        <value_map>
+            <name>LTV</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>Offline</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>Online</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
+</zabbix_export>

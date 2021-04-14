@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>5.0</version>
-    <date>2021-04-01T11:53:17Z</date>
+    <date>2021-04-14T07:25:07Z</date>
     <groups>
         <group>
             <name>Templates/Network devices</name>
@@ -19,6 +19,9 @@
             </groups>
             <applications>
                 <application>
+                    <name>DVR</name>
+                </application>
+                <application>
                     <name>IP cams</name>
                 </application>
                 <application>
@@ -26,6 +29,98 @@
                 </application>
             </applications>
             <items>
+                <item>
+                    <name>Real-time Remain recieve Bandwidth</name>
+                    <type>DEPENDENT</type>
+                    <key>BWInRemind</key>
+                    <delay>0</delay>
+                    <units>Mb</units>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.BWINREM</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>Real-time Remain recieve Bandwidth, %</name>
+                    <type>CALCULATED</type>
+                    <key>BWInRemindPersent</key>
+                    <delay>5m</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <params>100*last(BWInRemind)/last(BWInTotal)</params>
+                    <applications>
+                        <application>
+                            <name>DVR</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Total recieve Bandwidth</name>
+                    <type>DEPENDENT</type>
+                    <key>BWInTotal</key>
+                    <delay>0</delay>
+                    <units>Mb</units>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.BWINTOTAL</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>Total Send Bandwidth</name>
+                    <type>DEPENDENT</type>
+                    <key>BWOouTotal</key>
+                    <delay>0</delay>
+                    <units>Mb</units>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.BWOUTTOTAL</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>Real-time Remain Send Bandwidth</name>
+                    <type>DEPENDENT</type>
+                    <key>BWOutRemind</key>
+                    <delay>0</delay>
+                    <units>Mb</units>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.BWOUTREM</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>Real-time Remain Send Bandwidth, %</name>
+                    <type>CALCULATED</type>
+                    <key>BWOutRemindPersent</key>
+                    <delay>5m</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <params>100*last(BWOutRemind)/last(BWOutTotal)</params>
+                    <applications>
+                        <application>
+                            <name>DVR</name>
+                        </application>
+                    </applications>
+                </item>
                 <item>
                     <name>Cams</name>
                     <type>EXTERNAL</type>
@@ -38,6 +133,14 @@
                             <name>IP cams</name>
                         </application>
                     </applications>
+                </item>
+                <item>
+                    <name>CamsDVR status</name>
+                    <type>EXTERNAL</type>
+                    <key>get_cams.py[{HOST.CONN}, &quot;status&quot;]</key>
+                    <delay>60m</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
                 </item>
             </items>
             <discovery_rules>
@@ -104,7 +207,7 @@ IP - {#CAMIP}&#13;
     </templates>
     <triggers>
         <trigger>
-            <expression>{Template LTV-RNE_eng:web.test.fail[Web site availability].last(#3)}&lt;&gt;0</expression>
+            <expression>{Template LTV-RNE_eng:web.test.fail[Web site availability].max(300)}&lt;&gt;0</expression>
             <name>{HOST.NAME} is not available</name>
             <priority>DISASTER</priority>
         </trigger>
