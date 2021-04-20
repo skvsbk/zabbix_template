@@ -17,12 +17,12 @@ from pyzabbix import ZabbixAPI
 url_login = "https://unifi.acticomp.local:8443"
 url_ap = "https://unifi.acticomp.local:8443/manage/site/default/devices/1/100"
 username = "admin"
-password = "1q2w3e4r5t"
+password = "password"
 
 # Zabbix server credentials
 url_zabbix = "http://zabbix.acticomp.local"
 zapi = ZabbixAPI(url_zabbix)
-zapi.login("skv", "Qwerty123")
+zapi.login("admin", "password")
 template_id = "10587"
 group_id = "58"
 
@@ -35,7 +35,6 @@ def get_html(url_login, url_ap):
     driverOptions.add_argument("--disable-dev-shm-usage")
     driverOptions.add_argument("--disable-setuid-sandbox")
     driverOptions.add_argument("start-maximized")
-    #driverOptions.add_argument("--disable-gpu")   # applicable to windows os only
     driverOptions.add_argument("--disable-extensions")
     driverOptions.add_argument("disable-infobars")
     driverOptions.add_argument('--ignore-certificate-errors')
