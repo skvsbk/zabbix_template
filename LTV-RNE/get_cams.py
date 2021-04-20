@@ -72,7 +72,7 @@ if action not in actionList:
     sys.exit()
 
 username = "admin"
-password = "Admin272218"
+password = "password"
 url_login = 'http://' + ip_address + '/#login'
 url_cams = 'http://' + ip_address + '/#config/channel/list'
 url_stat = 'http://' + ip_address + '/#config/system/channel/status'
