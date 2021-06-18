@@ -1,19 +1,24 @@
 #!/usr/bin/python3
 
-from pysnmp.hlapi import *
-import pymysql
+from pysnmp.hlapi import * 
+from dotenv import load_dotenv 
+import pymysql 
+
+
+# Credentials
+load_dotenv('.env')
 
 # SNMP connection
 community_string = 'public'
 port_snmp = 161
 OID_FdbPort = '1.3.6.1.2.1.17.4.3.1.2'
-OID_Exclude = '1.3.6.1.2.1.17.4.3.1.3' # '1.3.6.1.2.1.17.4.4'
+OID_Exclude = '1.3.6.1.2.1.17.4.3.1.3' 
 
 # DB connection
-DBHost = '10.12.0.21' # 'localhost'
-DBName = 'eltex'
-DBUser = 'zabbix'
-DBPassword = 'zabbixDBpass'
+DBHost = os.getenv('DBHost') 
+DBName = os.getenv('DBName') 
+DBUser = os.getenv('DBUser')  
+DBPassword = os.getenv('DBPassword')  
 
 # IP Eltex
 ip_address_hosts  = ['10.12.32.2','10.12.32.3','10.12.32.4','10.12.32.5','10.12.32.6','10.12.32.7','10.12.32.10','10.12.0.2','10.12.0.3']

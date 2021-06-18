@@ -1,18 +1,22 @@
 #!/usr/bin/python3
 
-import pymysql
 import sys
+import pymysql
+from dotenv import load_dotenv 
+
+
+# Credentials
+load_dotenv('.env')
 
 # Аргументы - IP коммутатора, номер порта
-
 IP_address  =  sys.argv[1]	# '10.12.32.7'
 Port_number =  sys.argv[2]	# '107'
 
 # Параметры подключения к DB
-DBHost = '10.12.0.21' # 'localhost'
-DBName = 'eltex'
-DBUser = 'zabbix'
-DBPassword = 'zabbixDBpass'
+DBHost = os.getenv('DBHost') 
+DBName = os.getenv('DBName') 
+DBUser = os.getenv('DBUser') 
+DBPassword = os.getenv('DBPassword') 
 
 # Подключение к DB
 connection = pymysql.connect(
