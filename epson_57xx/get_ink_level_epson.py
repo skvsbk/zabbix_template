@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+'''
+get_ink_level.py <IP address> <discovery|element>
+'''
+
 import requests
 from bs4 import BeautifulSoup
 import lxml
