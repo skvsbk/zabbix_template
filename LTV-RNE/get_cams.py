@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
 '''
-
-get_cams.py <IP_address> <discovery|element|status>
-
+Compatibility:  LTV-RNE-163, LTV-RNE-161, LTV-RNE-320, LTV-RNE-1280
+Usage:  get_cams.py <IP_address> <discovery|element|status>
 '''
 
 import sys
