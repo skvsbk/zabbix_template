@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 '''
+Compatibility:  Epson WF-C5790, Epson WF-C579
 Usage:  get_ink_level.py <IP address> <discovery|element>
 '''
 
