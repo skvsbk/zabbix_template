@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 '''
-get_ink_level.py <IP address> <discovery|element>
+Usage:  get_ink_level.py <IP address> <discovery|element>
 '''
 
 import requests
