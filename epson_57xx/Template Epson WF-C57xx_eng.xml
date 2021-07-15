@@ -49,7 +49,7 @@ Collects data by SNMP and parsing (in the case of using non-original cartridges)
                 <item>
                     <name>Cartridges (non-original NO)</name>
                     <type>EXTERNAL</type>
-                    <key>get_ink_level_epson.py[{HOST.CONN}, &quot;2&quot;]</key>
+                    <key>get_ink_level_epson.py[{HOST.CONN}, &quot;element&quot;]</key>
                     <delay>15m</delay>
                     <trends>0</trends>
                     <value_type>TEXT</value_type>
@@ -198,7 +198,7 @@ Collects data by SNMP and parsing (in the case of using non-original cartridges)
                         </step>
                     </preprocessing>
                     <master_item>
-                        <key>get_ink_level_epson.py[{HOST.CONN}, &quot;2&quot;]</key>
+                        <key>get_ink_level_epson.py[{HOST.CONN}, &quot;element&quot;]</key>
                     </master_item>
                     <triggers>
                         <trigger>
