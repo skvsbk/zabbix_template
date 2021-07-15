@@ -53,7 +53,7 @@ for ink in inks:
         if int(cartridge_level) <= 2 or cartridge_level == None:
             cartridge_level = 50
 
-    json_string_element[cartridge_name] = int(cartridge_level)*2
+    json_string_element[cartridge_name] = 100-int(cartridge_level)*2 if cartridge_name == "Waste" else int(cartridge_level)*2
     if cartridge_name != "Waste" and action == "discovery":
         json_string_discovery += '{"{#COLOR}":"' + cartridge_name + '"},'
 
