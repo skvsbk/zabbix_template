@@ -443,7 +443,7 @@ Collects data by SNMP and parsing (in the case of using non-original cartridges)
                 <discovery_rule>
                     <name>Cartridges discovery</name>
                     <type>EXTERNAL</type>
-                    <key>get_ink_level_epson.py[{HOST.CONN}, &quot;1&quot;]</key>
+                    <key>get_ink_level_epson.py[{HOST.CONN}, &quot;discovery&quot;]</key>
                     <delay>60m</delay>
                     <item_prototypes>
                         <item_prototype>
@@ -464,7 +464,7 @@ Collects data by SNMP and parsing (in the case of using non-original cartridges)
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>get_ink_level_epson.py[{HOST.CONN}, &quot;2&quot;]</key>
+                                <key>get_ink_level_epson.py[{HOST.CONN}, &quot;element&quot;]</key>
                             </master_item>
                             <trigger_prototypes>
                                 <trigger_prototype>
