@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2021-07-15T09:47:05Z</date>
+    <groups>
+        <group>
+            <name>Templates/Printers</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template Epson WF-C57xx</template>
+            <name>Template Epson WF-C57xx</name>
+            <description>Created by skv</description>
+            <groups>
+                <group>
+                    <name>Templates/Printers</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Данные о принтере</name>
+                </application>
+                <application>
+                    <name>Счетчики (картр)</name>
+                </application>
+                <application>
+                    <name>Счетчики страниц</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Версия программного обеспеченгия</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.2.2.1.2.1</snmp_oid>
+                    <key>firmware.device</key>
+                    <delay>1d</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <inventory_link>SOFTWARE</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Данные о принтере</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Картриджи (non-original NO)</name>
+                    <type>EXTERNAL</type>
+                    <key>get_ink_level_epson.py[{HOST.CONN}, &quot;element&quot;]</key>
+                    <delay>15m</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                </item>
+                <item>
+                    <name>Уровень &quot;памперса&quot; (Waste)</name>
+                    <type>DEPENDENT</type>
+                    <key>levelWaste</key>
+                    <delay>0</delay>
+                    <units>%</units>
+                    <applications>
+                        <application>
+                            <name>Счетчики (картр)</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <params>$.Waste</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>get_ink_level_epson.py[{HOST.CONN}, &quot;element&quot;]</key>
+                    </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;=80 and {last()}&lt;90</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;=90 or&#13;
+{last()}&lt;80</recovery_expression>
+                            <name>&quot;Памперс&quot; заполнен более чем на 80% {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;=90 and {last()}&lt;96</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;=96 or&#13;
+{last()}&lt;90</recovery_expression>
+                            <name>&quot;Памперс&quot; заполнен более чем на 90% {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&gt;=96</expression>
+                            <name>&quot;Памперс&quot; заполнен более чем на 96% {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Расположение</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.1.6.0</snmp_oid>
+                    <key>location.device</key>
+                    <delay>1d</delay>
+                    <trends>0</trends>
+                    <status>DISABLED</status>
+                    <value_type>TEXT</value_type>
+                    <inventory_link>LOCATION</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Данные о принтере</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>MAC Address</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.2.2.1.6.1</snmp_oid>
+                    <key>mac.device</key>
+                    <delay>1d</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <inventory_link>MACADDRESS_A</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Данные о принтере</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Модель</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.25.3.2.1.3.1</snmp_oid>
+                    <key>model.device</key>
+                    <delay>1d</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <applications>
+                        <application>
+                            <name>Данные о принтере</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Страниц отпечатано всего</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.43.10.2.1.4.1.1</snmp_oid>
+                    <key>printsheets</key>
+                    <delay>10m</delay>
+                    <history>30d</history>
+                    <trends>30d</trends>
+                    <applications>
+                        <application>
+                            <name>Счетчики страниц</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Серийный номер</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.43.5.1.1.17.1</snmp_oid>
+                    <key>sn.device</key>
+                    <delay>1d</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <inventory_link>SERIALNO_A</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Данные о принтере</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Статус</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.25.3.5.1.1.1</snmp_oid>
+                    <key>status.device</key>
+                    <delay>5m</delay>
+                    <applications>
+                        <application>
+                            <name>Данные о принтере</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>Printers status</name>
+                    </valuemap>
+                    <preprocessing>
+                        <step>
+                            <type>HEX_TO_DECIMAL</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                </item>
+                <item>
+                    <name>Модель картриджа (Black)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.43.11.1.1.6.1.1</snmp_oid>
+                    <key>tonerboxblack.device</key>
+                    <delay>1d</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <applications>
+                        <application>
+                            <name>Данные о принтере</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Модель картриджа (Cyan)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.43.11.1.1.6.1.2</snmp_oid>
+                    <key>tonerboxcyan.device</key>
+                    <delay>1d</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>1d</description>
+                    <applications>
+                        <application>
+                            <name>Данные о принтере</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Модель картриджа (Magenta)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.43.11.1.1.6.1.3</snmp_oid>
+                    <key>tonerboxmagenta.device</key>
+                    <delay>1d</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>1d</description>
+                    <applications>
+                        <application>
+                            <name>Данные о принтере</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Модель картриджа (Yellow)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.43.11.1.1.6.1.4</snmp_oid>
+                    <key>tonerboxyellow.device</key>
+                    <delay>1d</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>1d</description>
+                    <applications>
+                        <application>
+                            <name>Данные о принтере</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Остаток в картридже (Black)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.43.11.1.1.9.1.1</snmp_oid>
+                    <key>tonergrammsBlack</key>
+                    <delay>15m</delay>
+                    <trends>90d</trends>
+                    <status>DISABLED</status>
+                    <units>%</units>
+                    <applications>
+                        <application>
+                            <name>Счетчики (картр)</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}=1</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;1</recovery_expression>
+                            <name>Осталось менее 1% чернил (Black) в {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}=2</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;2 or {last()}=1</recovery_expression>
+                            <name>Осталось менее 2% чернил (Black) в {HOST.NAME}</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;=4 and {last()}&gt;2</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;4 or {last()}&lt;3</recovery_expression>
+                            <name>Осталось менее 4% чернил (Black) в {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}=5</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;5 or {last()}&lt;=4</recovery_expression>
+                            <name>Осталось менее 5% чернил (Black) в {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Остаток в картридже (Cyan)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.43.11.1.1.9.1.2</snmp_oid>
+                    <key>tonergrammsCyan</key>
+                    <delay>15m</delay>
+                    <trends>90d</trends>
+                    <status>DISABLED</status>
+                    <units>%</units>
+                    <applications>
+                        <application>
+                            <name>Счетчики (картр)</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}=1</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;1</recovery_expression>
+                            <name>Осталось менее 1% чернил (Cyan) в {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}=2</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;2 or {last()}=1</recovery_expression>
+                            <name>Осталось менее 2% чернил (Cyan) в {HOST.NAME}</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;=4 and {last()}&gt;2</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;4 or {last()}&lt;3</recovery_expression>
+                            <name>Осталось менее 4% чернил (Cyan) в {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}=5</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;5 or {last()}&lt;=4</recovery_expression>
+                            <name>Осталось менее 5% чернил (Cyan) в {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Остаток в картридже (Magenta)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.43.11.1.1.9.1.3</snmp_oid>
+                    <key>tonergrammsMagenta</key>
+                    <delay>15m</delay>
+                    <trends>90d</trends>
+                    <status>DISABLED</status>
+                    <units>%</units>
+                    <applications>
+                        <application>
+                            <name>Счетчики (картр)</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}=1</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;1</recovery_expression>
+                            <name>Осталось менее 1% чернил (Magenta) в {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}=2</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;2 or {last()}=1</recovery_expression>
+                            <name>Осталось менее 2% чернил (Magenta) в {HOST.NAME}</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;=4 and {last()}&gt;2</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;4 or {last()}&lt;3</recovery_expression>
+                            <name>Осталось менее 4% чернил (Magenta) в {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}=5</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;5 or {last()}&lt;=4</recovery_expression>
+                            <name>Осталось менее 5% чернил (Magenta) в {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Остаток в картридже (Yellow)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.43.11.1.1.9.1.4</snmp_oid>
+                    <key>tonergrammsYellow</key>
+                    <delay>15m</delay>
+                    <trends>90d</trends>
+                    <status>DISABLED</status>
+                    <units>%</units>
+                    <applications>
+                        <application>
+                            <name>Счетчики (картр)</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}=1</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;1</recovery_expression>
+                            <name>Осталось менее 1% чернил (Yellow) в {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}=2</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;2 or {last()}=1</recovery_expression>
+                            <name>Осталось менее 2% чернил (Yellow) в {HOST.NAME}</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}&lt;=4 and {last()}&gt;2</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;4 or {last()}&lt;3</recovery_expression>
+                            <name>Осталось менее 4% чернил (Yellow) в {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last()}=5</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last()}&gt;5 or {last()}&lt;=4</recovery_expression>
+                            <name>Осталось менее 5% чернил (Yellow) в {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Время Uptime</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.1.3.0</snmp_oid>
+                    <key>uptime.device</key>
+                    <units>uptime</units>
+                    <applications>
+                        <application>
+                            <name>Счетчики (картр)</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <params>0.01</params>
+                        </step>
+                    </preprocessing>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Cartridges discovery</name>
+                    <type>EXTERNAL</type>
+                    <key>get_ink_level_epson.py[{HOST.CONN}, &quot;discovery&quot;]</key>
+                    <delay>60m</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Остаток в картридже ({#COLOR} NO)</name>
+                            <type>DEPENDENT</type>
+                            <key>tonerpercentNO[{#COLOR}]</key>
+                            <delay>0</delay>
+                            <units>%</units>
+                            <applications>
+                                <application>
+                                    <name>Счетчики (картр)</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$.{#COLOR}</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>get_ink_level_epson.py[{HOST.CONN}, &quot;element&quot;]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}=2</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>{last()}&gt;2</recovery_expression>
+                                    <name>Осталось менее 2% чернил ({#COLOR} NO) в {HOST.NAME}</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>{last()}=4</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>{last()}&gt;4 or {last()}&lt;3</recovery_expression>
+                                    <name>Осталось менее 4% чернил ({#COLOR} NO) в {HOST.NAME}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>{last()}=6</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>{last()}&gt;6 or {last()}&lt;5</recovery_expression>
+                                    <name>Осталось менее 6% чернил ({#COLOR} NO) в {HOST.NAME}</name>
+                                    <priority>INFO</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+    <value_maps>
+        <value_map>
+            <name>Printers status</name>
+            <mappings>
+                <mapping>
+                    <value>3</value>
+                    <newvalue>Ready</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
+</zabbix_export>
